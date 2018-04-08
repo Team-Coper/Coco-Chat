@@ -37,13 +37,6 @@ jacocoTestReport {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven { url "http://repo.spring.io/libs-release" }
-    maven { url "http://repo.spring.io/milestone" }
-    maven { url "http://repo.spring.io/snapshot" }
-}
-
 ext {
     redisVersion = '0.6'
     jUnit5Version = '5.0.0-M5'
