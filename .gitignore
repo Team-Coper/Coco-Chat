@@ -1,6 +1,6 @@
 
 .gradle
-/build/
+/bui
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
@@ -12,7 +12,7 @@
 .springBeans
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -24,3 +24,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+### OS ###
+**/.DS_Store
