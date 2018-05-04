@@ -26,6 +26,7 @@ angular.module('springChat.controllers', ['toaster'])
 		};
 		
 		$scope.startTyping = function() {
+			return ; // 비활성화
 			// Don't send notification if we are still typing or we are typing a private message
 	        if (angular.isDefined(typing) || $scope.sendTo != "everyone") return;
 	        
@@ -57,14 +58,17 @@ angular.module('springChat.controllers', ['toaster'])
 				$scope.username = frame.headers['user-name'];
 
 				chatSocket.subscribe("/app/chat.participants", function(message) {
+                    console.log("--- working participants subscribe");
 					$scope.participants = JSON.parse(message.body);
 				});
 				  
 				chatSocket.subscribe("/topic/chat.login", function(message) {
+					console.log("--- working login subscribe");
 					$scope.participants.unshift({username: JSON.parse(message.body).username, typing : false});
 				});
 		        	 
 				chatSocket.subscribe("/topic/chat.logout", function(message) {
+                    console.log("--- working logout subscribe");
 					var username = JSON.parse(message.body).username;
 					for(var index in $scope.participants) {
 						if($scope.participants[index].username == username) {
@@ -87,16 +91,24 @@ angular.module('springChat.controllers', ['toaster'])
 				});
 		        	 
 				chatSocket.subscribe("/topic/chat.message", function(message) {
+                    console.log("--- working chat subscribe");
 					$scope.messages.unshift(JSON.parse(message.body));
 		        });
+
+                chatSocket.subscribe("/topic/chat.group", function (message) {
+                    console.log("--- working group message subscribe");
+                    $scope.messages.unshift(JSON.parse(message.body));
+                });
 				  
 				chatSocket.subscribe("/user/exchange/amq.direct/chat.message", function(message) {
+                    console.log("--- working private chat subscribe");
 					var parsed = JSON.parse(message.body);
 					parsed.priv = true;
 					$scope.messages.unshift(parsed);
 		        });
 				  
 				chatSocket.subscribe("/user/exchange/amq.direct/errors", function(message) {
+                    console.log("--- working errors subscribe");
 					toaster.pop('error', "Error", message.body);
 		        });
 		          

@@ -59,9 +59,17 @@ public class ChatController {
 		message.setUsername(principal.getName());
 
 		simpMessagingTemplate.convertAndSend("/user/" + username + "/exchange/amq.direct/chat.message", message);
-
 	}
-	
+
+	// 수정 중
+	@MessageMapping("/chat.private.{username}")
+	public void filterGroupMessage(@Payload ChatMessage message, @DestinationVariable("groupname") String groupname, Principal principal) {
+		checkProfanityAndSanitize(message);
+		message.setUsername(principal.getName());
+
+		simpMessagingTemplate.convertAndSend("/user/" + groupname + "/exchange/amq.direct/chat.message", message);
+	}
+
 	private void checkProfanityAndSanitize(ChatMessage message) {
 		long profanityLevel = profanityFilter.getMessageProfanity(message.getMessage());
 		profanity.increment(profanityLevel);
